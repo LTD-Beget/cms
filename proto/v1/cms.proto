@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package beget.cms.v1.cms;
+
+import "google/api/annotations.proto";
+import "cms/proto/v1/structures.proto";
+
+service CmsService {
+    rpc getList (GetListRequest) returns (GetListResponse) {
+        option (google.api.http) = {
+          get: "v1/cms/list"
+        };
+    }
+
+    rpc getInstalled (GetInstalledRequest) returns (GetInstalledResponse) {
+        option (google.api.http) = {
+            get: "v1/cms/installed"
+        };
+    }
+
+    rpc install (InstallRequest) returns (InstallResponse) {
+        option (google.api.http) = {
+            post: "v1/cms/installer"
+            body: "*"
+        };
+    }
+
+    rpc remove (RemoveRequest) returns (RemoveResponse) {
+        option (google.api.http) = {
+            delete: "v1/cms/installer/{id}"
+        };
+    }
+}
+
+message GetListRequest {
+
+}
+
+message GetListResponse {
+    repeated structures.Cms cms = 1;
+}
+
+message GetInstalledRequest {
+
+}
+
+message GetInstalledResponse {
+    repeated structures.InstalledCms cms = 1;
+}
+
+message InstallRequest {
+    uint32 site_id = 1;
+    uint32 version_id = 2;
+    repeated structures.InstalledSetting settings = 3;
+}
+
+message InstallRequest {
+    uint32 site_id = 1;
+    uint32 version_id = 2;
+    bool force_reinstall = 3;  // Не выбросит ошибку SITE_NOT_EMPTY в случае если сайт не пустой
+    repeated structures.InstalledSetting settings = 4;
+}
+
+message InstallResponse {
+    oneof response {
+        structures.InstalledCms cms = 1;
+        Error error = 2;
+    }
+
+    message Error {
+        enum Code {
+            _ = 0;
+            SITE_NOT_EMPTY = 1;
+            INVALID_VERSION = 2;
+            INVALID_SITE = 3;
+            INVALID_SETTINGS = 4;
+        }
+
+        Code code = 1;
+        repeated structures.SettingValidationError setting_errors = 2;
+    }
+}
+
+message RemoveRequest {
+    uint32 install_id = 1;
+    bool remove_db = 2;
+}
+
+message RemoveResponse {
+    oneof response {
+        Success success = 1;
+        Error error = 2;
+    }
+
+    message Success {
+    }
+
+    message Error {
+        enum Code {
+            _ = 0;
+        }
+
+        Code code = 1;
+    }
+}
