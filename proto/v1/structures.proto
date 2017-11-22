@@ -20,13 +20,15 @@ message InstalledCms {
     uint32 install_id = 1;
     uint32 site_id = 2;
     repeated string domains = 3;
-    string post_install_help = 4;
-    InstalledSetting settings = 5;
-    string cms_alias = 6; // системное имя CMS
-    string cms_title = 7; // полное наименование CMS
-    repeated LocalizedString cms_descriptions = 8; // Описание CMS
-    string cms_vendor_url = 9; // URL официального сайта CMS
-    Version installed_version = 10;
+    LocalizedString success_install_help = 4;
+    LocalizedString post_install_help = 5;
+    InstalledSetting settings = 6;
+    string cms_alias = 7; // системное имя CMS
+    string cms_title = 8; // полное наименование CMS
+    repeated LocalizedString cms_descriptions = 9; // Описание CMS
+    string cms_cp_url = 10; // URL панели управления CMS
+    string cms_vendor_url = 11; // URL официального сайта CMS
+    Version installed_version = 12;
 }
 
 message LocalizedString {
