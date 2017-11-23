@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package beget.cms.v1.structures;
+
+message Cms {
+    uint32 cms_id = 1; // id CMS
+    string alias = 2; // системное имя CMS
+    string title = 3; // полное наименование CMS
+    repeated LocalizedString description = 4; // Описание CMS
+    string vendor_url = 5; // URL официального сайта CMS
+    int32 popularity = 6; // Индекс популярности CMS;
+    int32 popularity_eur = 7; // Индекс популярности CMS для Европы;
+    bool is_free = 8; // Является ли CMS бесплатной
+    repeated Type types = 9;
+    repeated Version version = 10;
+    repeated Setting setting = 11;
+}
+
+message InstalledCms {
+    uint32 install_id = 1;
+    uint32 site_id = 2;
+    repeated string domain = 3;
+    LocalizedString success_install_help = 4;
+    LocalizedString post_install_help = 5;
+    InstalledSetting settings = 6;
+    string cms_alias = 7; // системное имя CMS
+    string cms_title = 8; // полное наименование CMS
+    repeated LocalizedString cms_description = 9; // Описание CMS
+    string cms_cp_url = 10; // URL панели управления CMS
+    string cms_vendor_url = 11; // URL официального сайта CMS
+    Version installed_version = 12;
+}
+
+message LocalizedString {
+    Language language = 1;
+    string value = 2;
+}
+
+message LocaleString {
+    Language language = 1;
+    string value = 2;
+}
+
+message Price {
+    Currency currency = 1;
+    float price = 2;
+}
+
+enum Currency {
+    RUB = 0;
+}
+
+enum Language {
+    EN = 0;
+    RU = 1;
+}
+
+enum Type {
+    UNIVERSAL = 0;
+    SHOP = 1;
+    BLOG = 2;
+}
+
+message Version {
+    uint32 version_id = 1;
+    string version = 2;
+    bool has_trial = 3;
+    repeated LocalizedString description = 4;
+    repeated Price price = 5;
+    repeated Language language = 6;
+}
+
+message Setting {
+    uint32 setting_id = 1;
+    string alias = 2;
+    repeated LocalizedString title = 3;
+}
+
+message InstalledSetting {
+    uint32 setting_id = 1;
+    string alias = 2;
+    string value = 3;
+    repeated LocalizedString title = 4;
+}
+
+message SettingValidationError {
+    enum ErrorCode {
+        _ = 0;
+        VALUE_EMPTY = 1;
+        VALUE_INVALID = 2;
+    }
+
+    uint32 setting_id = 1;
+    string alias = 2;
+    string value = 3;
+    repeated LocalizedString title = 4;
+    ErrorCode error_code = 5;
+    repeated LocalizedString error_message = 6;
+}
