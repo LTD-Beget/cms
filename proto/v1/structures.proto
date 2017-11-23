@@ -6,14 +6,13 @@ message Cms {
     uint32 cms_id = 1; // id CMS
     string alias = 2; // системное имя CMS
     string title = 3; // полное наименование CMS
-    repeated LocalizedString description = 4; // Описание CMS
-    string vendor_url = 5; // URL официального сайта CMS
-    int32 popularity = 6; // Индекс популярности CMS;
-    int32 popularity_eur = 7; // Индекс популярности CMS для Европы;
-    bool is_free = 8; // Является ли CMS бесплатной
-    repeated Type types = 9;
-    repeated Version version = 10;
-    repeated Setting setting = 11;
+    string vendor_url = 4; // URL официального сайта CMS
+    bool is_free = 5; // Является ли CMS бесплатной
+    repeated LocalizedString description = 6; // Описание CMS
+    repeated Popularity popularity = 7; // Индекс популярности CMS
+    repeated Type types = 8; // Классификация CMS
+    repeated Version version = 9; // Версии CMS
+    repeated Setting setting = 10; // Настройки для CMS
 }
 
 message InstalledCms {
@@ -36,8 +35,8 @@ message LocalizedString {
     string value = 2;
 }
 
-message LocaleString {
-    Language language = 1;
+message Popularity {
+    Country code = 1;
     string value = 2;
 }
 
@@ -48,6 +47,12 @@ message Price {
 
 enum Currency {
     RUB = 0;
+}
+
+enum Country {
+    RU = 0;
+    UA = 1;
+    EU = 2;
 }
 
 enum Language {
