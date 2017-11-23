@@ -14,7 +14,7 @@ service CmsService {
 
     rpc getInstalled (GetInstalledRequest) returns (GetInstalledResponse) {
         option (google.api.http) = {
-            get: "v1/cms/installed"
+            get: "v1/cms/installer"
         };
     }
 
@@ -27,7 +27,7 @@ service CmsService {
 
     rpc remove (RemoveRequest) returns (RemoveResponse) {
         option (google.api.http) = {
-            delete: "v1/cms/installer/{id}"
+            delete: "v1/cms/installer/{install_id}"
         };
     }
 }
@@ -51,20 +51,15 @@ message GetInstalledResponse {
 message InstallRequest {
     uint32 site_id = 1;
     uint32 version_id = 2;
-    repeated structures.InstalledSetting settings = 3;
-}
-
-message InstallRequest {
-    uint32 site_id = 1;
-    uint32 version_id = 2;
     bool force_reinstall = 3;  // Не выбросит ошибку SITE_NOT_EMPTY в случае если сайт не пустой
-    repeated structures.InstalledSetting settings = 4;
+    repeated structures.InstalledSetting setting = 4;
 }
 
 message InstallResponse {
     oneof response {
         structures.InstalledCms cms = 1;
         Error error = 2;
+        SettingError error_setting = 3;
     }
 
     message Error {
@@ -73,11 +68,13 @@ message InstallResponse {
             SITE_NOT_EMPTY = 1;
             INVALID_VERSION = 2;
             INVALID_SITE = 3;
-            INVALID_SETTINGS = 4;
         }
 
         Code code = 1;
-        repeated structures.SettingValidationError setting_errors = 2;
+    }
+
+    message SettingError {
+        repeated structures.SettingValidationError setting_error = 1;
     }
 }
 
